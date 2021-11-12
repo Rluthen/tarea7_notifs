@@ -14,6 +14,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    AwesomeNotifications().requestPermissionToSendNotifications().then(
+      (isAllowed) {
+        if (isAllowed) {
+          AwesomeNotifications().displayedStream.listen(
+            (notificationMsg) {
+              print(notificationMsg);
+            },
+          );
+          AwesomeNotifications().actionStream.listen(
+            (notificationAction) {
+              if (!StringUtils.isNullOrEmpty(
+                  notificationAction.buttonKeyInput)) {
+                print(notificationAction);
+              } else {}
+              ;
+            },
+          );
+        }
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
