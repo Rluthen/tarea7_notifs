@@ -125,7 +125,7 @@ class NotifMenu extends StatelessWidget {
                   FontAwesomeIcons.personBooth,
                   color: Colors.grey[200],
                 ),
-                label: Text("Con accion"),
+                label: Text("C accion"),
                 backgroundColor: Colors.black87,
                 onPressed: notifConAccion,
               ),

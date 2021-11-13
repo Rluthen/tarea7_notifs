@@ -30,3 +30,67 @@ Future<void> showLargeIconNotification(int id) async {
     ),
   );
 }
+
+Future<void> showBigPictureLargeIconNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: id,
+      channelKey: channelBigPictureId,
+      title: bigPictureTitle,
+      body: bigPictureDescr,
+      largeIcon: iconExample,
+      bigPicture: pictureExample,
+      notificationLayout: NotificationLayout.BigPicture,
+      payload: {'uuid': 'uuid-test'},
+    ),
+  );
+}
+
+Future<void> showBigPictureAndActionButtonsAndReplayNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: channelBigPictureId,
+        title: bigPictureTitle,
+        body: bigPictureDescr,
+        largeIcon: iconExample,
+        bigPicture: pictureExample,
+        notificationLayout: NotificationLayout.BigPicture,
+        payload: {'token': 'notificacion con acciones'},
+      ),
+      actionButtons: [
+        NotificationActionButton(
+          key: actionOneKey,
+          label: actionOneTitle,
+          buttonType: ActionButtonType.InputField,
+        ),
+        NotificationActionButton(
+          key: actionTwoKey,
+          label: actionTwoTitle,
+          buttonType: ActionButtonType.Default,
+        )
+      ]);
+}
+
+Future<void> showRepeatNotification(int id) async {
+  String localTimezone =
+      await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+  await AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: id,
+      channelKey: channelScheduleId,
+      title: scheduledTitle,
+      body: scheduledDescr,
+    ),
+    schedule: NotificationInterval(
+      interval: 60,
+      timeZone: localTimezone,
+      repeats: true,
+    ),
+  );
+}
+
+Future<void> cancelAllSchedules() async {
+  await AwesomeNotifications().cancelAllSchedules();
+}

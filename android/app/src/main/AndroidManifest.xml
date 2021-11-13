@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.push_notifs_o2021">
    <application
-        android:label="push_notifs_o2021"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Tarea Notifs"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -37,5 +37,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <service
+              android:name=".firebase.MessagingService"
+              android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

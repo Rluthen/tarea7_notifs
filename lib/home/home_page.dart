@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:push_notifs_o2021/books.dart';
 import 'package:push_notifs_o2021/utils/notification_util.dart';
@@ -15,6 +16,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print("Firebase token: ${value}");
+    });
+
+    FirebaseMessaging.onMessage.listen(
+      (remoteMessage) {
+        // AwesomeNotifications()
+        //     .createNotificationFromJsonData(remoteMessage.);
+        print(remoteMessage);
+      },
+    );
     AwesomeNotifications().requestPermissionToSendNotifications().then(
       (isAllowed) {
         if (isAllowed) {
@@ -23,12 +36,15 @@ class _HomePageState extends State<HomePage> {
               print(notificationMsg);
             },
           );
+
           AwesomeNotifications().actionStream.listen(
             (notificationAction) {
               if (!StringUtils.isNullOrEmpty(
                   notificationAction.buttonKeyInput)) {
                 print(notificationAction);
-              } else {}
+              } else {
+                processDefaultActionRecieved(notificationAction);
+              }
               ;
             },
           );
@@ -37,6 +53,16 @@ class _HomePageState extends State<HomePage> {
     );
 
     super.initState();
+  }
+
+  void processDefaultActionRecieved(ReceivedAction action) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Books(
+          datos: action.title,
+        ),
+      ),
+    );
   }
 
   @override
@@ -61,12 +87,13 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 2,
             child: NotifMenu(
-              notifSimple: () => {},
-              notifConIcono: () => {},
-              notifConImagen: () => {},
-              notifConAccion: () => {},
-              notifAgendada: () => {},
-              cancelNotifAgendada: () => {},
+              notifSimple: () => {showBasicNotification(123)},
+              notifConIcono: () => {showLargeIconNotification(321)},
+              notifConImagen: () => {showBigPictureLargeIconNotification(456)},
+              notifConAccion: () =>
+                  {showBigPictureAndActionButtonsAndReplayNotification(654)},
+              notifAgendada: () => {showRepeatNotification(987)},
+              cancelNotifAgendada: () => {cancelAllSchedules()},
             ),
           ),
         ],
